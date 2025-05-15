@@ -157,6 +157,6 @@ Tabela intermediária que representa os itens de um pedido.
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **SGBD:** PostgreSQL ou MySQL
+- **SGBD:** MySQL
 - **Ferramenta de modelagem:** dbdiagram.io & MySQL Workbench
 - **Script de criação:** disponível em breve na pasta `/scripts`
