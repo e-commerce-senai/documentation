@@ -1,162 +1,161 @@
 # 🛒 E-commerce Database
 
-Este repositório contém o modelo de banco de dados para um sistema de e-commerce, estruturado para gerenciar usuários, produtos, pedidos e formas de pagamento.
-
-## 📐 Estrutura do Banco de Dados
-
-A base de dados foi modelada para contemplar diferentes tipos de usuários (comum e jurídico), formas de pagamento variadas (Pix, boleto e cartão), além do controle completo de pedidos e produtos.
+Este repositório contém o modelo de banco de dados relacional para um sistema de e-commerce. A estrutura foi projetada para gerenciar diferentes tipos de usuários (comum e jurídico), diversas formas de pagamento (Pix, boleto, cartão), bem como o controle de produtos, pedidos e seus respectivos itens.
 
 ---
 
-### 🧑‍💼 Tabela `Tipo_Usuario`
+## 📐 Estrutura Geral
 
-Armazena os tipos de usuários (por exemplo, consumidor comum ou pessoa jurídica).
+A modelagem contempla:
 
-| Coluna     | Tipo     | Descrição                       |
-|------------|----------|---------------------------------|
-| id         | int      | Chave primária, auto incremento |
-| tipo       | varchar  | Tipo de usuário                 |
-| descricao  | varchar  | Descrição do tipo (opcional)    |
-
----
-
-### 👤 Tabela `Usuario_Comum`
-
-Contém os dados de usuários pessoas físicas.
-
-| Coluna          | Tipo     | Descrição                       |
-|------------------|----------|---------------------------------|
-| id               | int      | Chave primária, auto incremento |
-| nome             | varchar  | Nome do usuário                 |
-| sobrenome        | varchar  | Sobrenome do usuário            |
-| cpf              | varchar  | CPF (único)                     |
-| data_nascimento  | date     | Data de nascimento              |
-| email            | varchar  | E-mail (único)                  |
-| senha            | varchar  | Senha do usuário                |
-| endereco         | varchar  | Endereço (opcional)             |
-| id_tipo          | int      | Relacionamento com `Tipo_Usuario` |
+- Tipos distintos de usuários (físico e jurídico)
+- Detalhamento individual de formas de pagamento
+- Produtos com estoque e descrição
+- Pedidos realizados com múltiplos itens
 
 ---
 
-### 🏢 Tabela `Usuario_Juridico`
+## 📊 Tabelas e Colunas
 
-Contém os dados de usuários pessoas jurídicas.
+### 🧑‍💼 `Tipo_Usuario`
+Define o tipo de cadastro do usuário.
 
-| Coluna        | Tipo     | Descrição                       |
-|----------------|----------|---------------------------------|
-| id             | int      | Chave primária, auto incremento |
-| nome_fantasia  | varchar  | Nome fantasia                   |
-| razao_social   | varchar  | Razão social                    |
-| cnpj           | varchar  | CNPJ (único)                    |
-| endereco       | varchar  | Endereço                        |
-| email          | varchar  | E-mail (único)                  |
-| telefone       | varchar  | Telefone                        |
-| id_tipo        | int      | Relacionamento com `Tipo_Usuario` |
+| Coluna     | Tipo         | Descrição                            |
+|------------|--------------|--------------------------------------|
+| id         | int (PK)     | Chave primária (auto incremento)     |
+| tipo       | varchar(255) | Tipo de usuário (ex: comum, jurídico)|
+| descricao  | varchar(255) | Descrição adicional (opcional)       |
 
 ---
 
-### 💳 Tabela `Forma_Pagamento`
+### 👤 `Usuario_Comum`
+Dados de usuários pessoas físicas.
 
-Define os métodos disponíveis para pagamento.
-
-| Coluna     | Tipo     | Descrição                       |
-|------------|----------|---------------------------------|
-| id         | int      | Chave primária, auto incremento |
-| tipo       | varchar  | Tipo (Pix, Boleto, Cartão)      |
-| descricao  | varchar  | Descrição do método (opcional)  |
+| Coluna          | Tipo         | Descrição                           |
+|-----------------|--------------|-------------------------------------|
+| id              | int (PK)     | Chave primária                      |
+| nome            | varchar(255) | Nome do usuário                     |
+| sobrenome       | varchar(255) | Sobrenome                           |
+| cpf             | varchar(255) | CPF (único)                         |
+| data_nascimento | date         | Data de nascimento                  |
+| email           | varchar(255) | E-mail (único)                      |
+| senha           | varchar(255) | Senha de acesso                     |
+| endereco        | varchar(255) | Endereço (opcional)                 |
+| id_tipo         | int (FK)     | Referência a `Tipo_Usuario`         |
 
 ---
 
-### 💸 Tabelas de Detalhamento de Pagamento
+### 🏢 `Usuario_Juridico`
+Dados de empresas (pessoas jurídicas).
+
+| Coluna        | Tipo         | Descrição                           |
+|---------------|--------------|-------------------------------------|
+| id            | int (PK)     | Chave primária                      |
+| nome_fantasia | varchar(255) | Nome fantasia                       |
+| razao_social  | varchar(255) | Razão social                        |
+| cnpj          | varchar(255) | CNPJ (único)                        |
+| endereco      | varchar(255) | Endereço                            |
+| email         | varchar(255) | E-mail (único)                      |
+| telefone      | varchar(255) | Telefone de contato                 |
+| id_tipo       | int (FK)     | Referência a `Tipo_Usuario`         |
+
+---
+
+### 💳 `Forma_Pagamento`
+Métodos disponíveis para pagamento.
+
+| Coluna     | Tipo         | Descrição                      |
+|------------|--------------|-------------------------------|
+| id         | int (PK)     | Chave primária                |
+| tipo       | varchar(255) | Nome do tipo (Pix, Boleto etc.)|
+| descricao  | varchar(255) | Descrição adicional (opcional)|
+
+---
+
+### 💸 Tabelas Específicas de Pagamento
 
 #### `Pix`
-
-| Coluna            | Tipo     | Descrição                                |
-|-------------------|----------|------------------------------------------|
-| id                | int      | Chave primária, auto incremento          |
-| chave_pix         | varchar  | Chave Pix utilizada                      |
-| data_pagamento    | datetime | Data do pagamento (opcional)            |
-| id_forma_pagamento| int      | FK para `Forma_Pagamento`               |
+| Coluna             | Tipo         | Descrição                             |
+|--------------------|--------------|---------------------------------------|
+| id                 | int (PK)     | Chave primária                        |
+| chave_pix          | varchar(255) | Chave Pix                             |
+| data_pagamento     | datetime     | Data do pagamento (opcional)          |
+| id_forma_pagamento | int (FK)     | Referência a `Forma_Pagamento`        |
 
 #### `Boleto`
-
-| Coluna            | Tipo     | Descrição                                |
-|-------------------|----------|------------------------------------------|
-| id                | int      | Chave primária, auto incremento          |
-| codigo_boleto     | varchar  | Código do boleto                         |
-| vencimento        | date     | Data de vencimento                       |
-| pago              | date     | Data de pagamento (opcional)            |
-| id_forma_pagamento| int      | FK para `Forma_Pagamento`               |
+| Coluna             | Tipo         | Descrição                             |
+|--------------------|--------------|---------------------------------------|
+| id                 | int (PK)     | Chave primária                        |
+| codigo_boleto      | varchar(255) | Código identificador do boleto        |
+| vencimento         | date         | Data de vencimento                    |
+| pago               | date         | Data de pagamento (opcional)          |
+| id_forma_pagamento | int (FK)     | Referência a `Forma_Pagamento`        |
 
 #### `Cartao`
-
-| Coluna            | Tipo     | Descrição                                |
-|-------------------|----------|------------------------------------------|
-| id                | int      | Chave primária, auto incremento          |
-| numero_cartao     | varchar  | Número do cartão                         |
-| nome_titular      | varchar  | Nome do titular                          |
-| validade          | date     | Data de validade                         |
-| bandeira          | varchar  | Bandeira do cartão                       |
-| tipo_cartao       | bool     | Tipo: Débito (0) ou Crédito (1)         |
-| id_forma_pagamento| int      | FK para `Forma_Pagamento`               |
-
----
-
-### 📦 Tabela `Produtos`
-
-Armazena os produtos disponíveis na plataforma.
-
-| Coluna     | Tipo     | Descrição                       |
-|------------|----------|---------------------------------|
-| id         | int      | Chave primária, auto incremento |
-| nome       | varchar  | Nome do produto                 |
-| marca      | varchar  | Marca                           |
-| modelo     | varchar  | Modelo                          |
-| quantidade | int      | Estoque disponível              |
-| preco      | float    | Preço unitário                  |
-| descricao  | varchar  | Descrição (opcional)            |
+| Coluna             | Tipo         | Descrição                             |
+|--------------------|--------------|---------------------------------------|
+| id                 | int (PK)     | Chave primária                        |
+| numero_cartao      | varchar(255) | Número do cartão                      |
+| nome_titular       | varchar(255) | Nome do titular                       |
+| validade           | date         | Validade                              |
+| bandeira           | varchar(255) | Bandeira do cartão                    |
+| tipo_cartao        | boolean      | Tipo: 0 (Débito), 1 (Crédito)         |
+| id_forma_pagamento | int (FK)     | Referência a `Forma_Pagamento`        |
 
 ---
 
-### 📑 Tabela `Pedidos`
+### 📦 `Produtos`
+Catálogo de produtos disponíveis para venda.
 
-Controla os pedidos realizados pelos usuários.
-
-| Coluna            | Tipo     | Descrição                        |
-|-------------------|----------|----------------------------------|
-| id                | int      | Chave primária, auto incremento |
-| valor_total       | float    | Valor total do pedido           |
-| endereco_entrega  | varchar  | Endereço de entrega             |
-| id_usuario        | int      | FK para `Usuario_Comum`         |
-| id_forma_pagamento| int      | FK para `Forma_Pagamento`       |
+| Coluna     | Tipo         | Descrição                       |
+|------------|--------------|---------------------------------|
+| id         | int (PK)     | Chave primária                  |
+| nome       | varchar(255) | Nome do produto                 |
+| marca      | varchar(255) | Marca                           |
+| modelo     | varchar(255) | Modelo                          |
+| quantidade | int          | Quantidade em estoque           |
+| preco      | float        | Preço unitário                  |
+| descricao  | varchar(255) | Descrição (opcional)            |
 
 ---
 
-### 📦📑 Tabela `Pedido_Produto`
+### 📑 `Pedidos`
+Pedidos feitos por usuários comuns.
 
-Tabela intermediária que representa os itens de um pedido.
+| Coluna             | Tipo         | Descrição                           |
+|--------------------|--------------|-------------------------------------|
+| id                 | int (PK)     | Chave primária                      |
+| valor_total        | float        | Valor total do pedido               |
+| endereco_entrega   | varchar(255) | Endereço de entrega                 |
+| id_usuario         | int (FK)     | Referência a `Usuario_Comum`        |
+| id_forma_pagamento | int (FK)     | Referência a `Forma_Pagamento`      |
 
-| Coluna         | Tipo   | Descrição                          |
-|----------------|--------|------------------------------------|
-| id_pedido      | int    | FK para `Pedidos` (PK composta)    |
-| id_produto     | int    | FK para `Produtos` (PK composta)   |
-| quantidade     | int    | Quantidade de produtos             |
-| valor_unitario | float  | Valor unitário no momento da venda |
-| valor_total    | float  | Total do item (quantidade × valor) |
+---
+
+### 🔗 `Pedido_Produto`
+Relaciona pedidos aos produtos incluídos neles.
+
+| Coluna         | Tipo   | Descrição                                   |
+|----------------|--------|---------------------------------------------|
+| id_pedido      | int    | FK para `Pedidos` (parte da PK composta)     |
+| id_produto     | int    | FK para `Produtos` (parte da PK composta)    |
+| quantidade     | int    | Quantidade adquirida                         |
+| valor_unitario | float  | Valor unitário no momento da venda           |
+| valor_total    | float  | Subtotal referente ao item                   |
 
 ---
 
 ## 🔗 Relacionamentos
 
-- `Usuario_Comum` e `Usuario_Juridico` referenciam `Tipo_Usuario`.
-- `Pedidos` referenciam `Usuario_Comum` e `Forma_Pagamento`.
-- `Pix`, `Boleto` e `Cartao` referenciam `Forma_Pagamento`.
-- `Pedido_Produto` referencia `Pedidos` e `Produtos`.
+- `Usuario_Comum` & `Usuario_Juridico` → `Tipo_Usuario`
+- `Pedidos` → `Usuario_Comum`, `Forma_Pagamento`
+- `Pix`, `Boleto`, `Cartao` → `Forma_Pagamento`
+- `Pedido_Produto` → `Pedidos`, `Produtos`
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 - **SGBD:** MySQL
-- **Ferramenta de modelagem:** dbdiagram.io & MySQL Workbench
-- **Script de criação:** disponível em breve na pasta `/scripts`
+- **Modelagem:** dbdiagram.io, MySQL Workbench
+- **Script SQL:** disponível em breve na pasta `/scripts`
