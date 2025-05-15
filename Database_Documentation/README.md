@@ -158,4 +158,4 @@ Relaciona pedidos aos produtos incluídos neles.
 
 - **SGBD:** MySQL
 - **Modelagem:** dbdiagram.io, MySQL Workbench
-- **Script SQL:** disponível em breve na pasta `/scripts`
+- **Script SQL:** disponível na pasta `/scripts`
