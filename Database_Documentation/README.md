@@ -68,7 +68,7 @@ A modelagem contempla:
 |--------------------|----------|---------------------------------------|
 | id                 | int      | PK, auto incremento                   |
 | id_usuario_comum   | int      | FK → `Usuario_Comum(id)`              |
-| username           | varchar  | not null                              |
+| username           | varchar  | not null, único                       |
 
 ---
 
