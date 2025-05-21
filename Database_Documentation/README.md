@@ -2,7 +2,7 @@
 
 Este repositório contém o modelo de banco de dados relacional para um sistema de e-commerce. A estrutura foi projetada para gerenciar diferentes tipos de usuários (comum e jurídico), formas de pagamento, além do controle de produtos, pedidos, categorias, estoque e itens comprados.
 
-Modelo visual: [dbdiagram.io](https://dbdiagram.io/d/Projeto-Pet-Senai-6824d5045b2fc4582f9f8c42)
+Modelo visual: [dbdiagram.io](https://dbdiagram.io/d/Projeto-Pet-Senai-6824d5045b2fc4582f9f8c42)   
 Modelo MER: [BRMW](https://app.brmodeloweb.com/#!/publicview/682cc88d93035ccef6cfa6fe)
 
 ---
