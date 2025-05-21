@@ -1,6 +1,6 @@
 # 🛒 E-commerce Database
 
-Este repositório contém o modelo de banco de dados relacional para um sistema de e-commerce. A estrutura foi projetada para gerenciar diferentes tipos de usuários (comum e jurídico), formas de pagamento (Pix, Boleto, Cartão), além do controle de produtos, pedidos e itens comprados.
+Este repositório contém o modelo de banco de dados relacional para um sistema de e-commerce. A estrutura foi projetada para gerenciar diferentes tipos de usuários (comum e jurídico), formas de pagamento, além do controle de produtos, pedidos, categorias, estoque e itens comprados.
 
 Modelo visual: [dbdiagram.io](https://dbdiagram.io/d/Projeto-Pet-Senai-6824d5045b2fc4582f9f8c42)
 
@@ -10,10 +10,12 @@ Modelo visual: [dbdiagram.io](https://dbdiagram.io/d/Projeto-Pet-Senai-6824d5045
 
 A modelagem contempla:
 
-- Usuários comuns (pessoas físicas) e usuários jurídicos (empresas)
-- Detalhamento das formas de pagamento (Pix, Boleto, Cartão)
-- Catálogo de produtos com estoque e descrição
-- Pedidos com múltiplos itens e vínculo com o usuário e forma de pagamento
+- **Usuários comuns (pessoas físicas) e usuários jurídicos (empresas)**, com relacionamentos entre eles
+- **Cliente** com dados de login específicos
+- **Formas de pagamento**, incluindo Pix, Boleto e Cartão (comentado no modelo, mas ainda no planejamento)
+- **Catálogo de produtos** com categorias, preços, estoque e descrição
+- **Pedidos** com múltiplos itens, incluindo valor total, endereço de entrega e data do pedido
+- **Estoque** com controle de quantidade e localização dos produtos
 - Relacionamentos explícitos entre tabelas para manter integridade
 
 ---
@@ -50,7 +52,7 @@ A modelagem contempla:
 
 ---
 
-## 💳 `Forma_Pagamento`
+### 💳 `Forma_Pagamento`
 
 | Coluna     | Tipo     | Restrições         |
 |------------|----------|--------------------|
@@ -60,38 +62,13 @@ A modelagem contempla:
 
 ---
 
-### 💸 Tabelas Específicas de Pagamento
+### 🧑‍💻 `Cliente`
 
-#### `Pix`
-
-| Coluna             | Tipo       | Restrições                     |
-|--------------------|------------|--------------------------------|
-| id                 | int        | PK, auto incremento            |
-| chave_pix          | varchar    | not null                       |
-| data_pagamento     | datetime   | opcional                       |
-| id_forma_pagamento | int        | FK → `Forma_Pagamento(id)`     |
-
-#### `Boleto`
-
-| Coluna             | Tipo     | Restrições                     |
-|--------------------|----------|--------------------------------|
-| id                 | int      | PK, auto incremento            |
-| codigo_boleto      | varchar  | not null                       |
-| vencimento         | date     | not null                       |
-| pago               | date     | opcional                       |
-| id_forma_pagamento | int      | FK → `Forma_Pagamento(id)`     |
-
-#### `Cartao`
-
-| Coluna             | Tipo     | Restrições                     |
-|--------------------|----------|--------------------------------|
-| id                 | int      | PK, auto incremento            |
-| numero_cartao      | varchar  | not null                       |
-| nome_titular       | varchar  | not null                       |
-| validade           | date     | not null                       |
-| bandeira           | varchar  | not null                       |
-| tipo_cartao        | boolean  | not null (0 = Débito, 1 = Crédito) |
-| id_forma_pagamento | int      | FK → `Forma_Pagamento(id)`     |
+| Coluna             | Tipo     | Restrições                            |
+|--------------------|----------|---------------------------------------|
+| id                 | int      | PK, auto incremento                   |
+| id_usuario_comum   | int      | FK → `Usuario_Comum(id)`              |
+| username           | varchar  | not null                              |
 
 ---
 
@@ -102,45 +79,68 @@ A modelagem contempla:
 | id         | int      | PK, auto incremento           |
 | nome       | varchar  | not null                      |
 | marca      | varchar  | not null                      |
-| modelo     | varchar  | not null                      |
-| quantidade | int      | not null (controle de estoque)|
+| id_categoria | int    | FK → `Categorias(id)`         |
 | preco      | float    | not null                      |
 | descricao  | varchar  | opcional                      |
 
 ---
 
-### 📑 `Pedidos`
+### 🛒 `Pedidos`
 
 | Coluna             | Tipo     | Restrições                            |
 |--------------------|----------|---------------------------------------|
 | id                 | int      | PK, auto incremento                   |
 | valor_total        | float    | not null                              |
 | endereco_entrega   | varchar  | not null                              |
-| id_usuario         | int      | FK → `Usuario_Comum(id)`              |
+| data_pedido        | date     | not null                              |
+| id_cliente         | int      | FK → `Cliente(id)`                    |
 | id_forma_pagamento | int      | FK → `Forma_Pagamento(id)`            |
 
 ---
 
-### 🔗 `Pedido_Produto`
+### 📝 `Item_Pedido`
 
-| Coluna         | Tipo   | Restrições                                  |
-|----------------|--------|---------------------------------------------|
-| id_pedido      | int    | PK, FK → `Pedidos(id)`                      |
-| id_produto     | int    | PK, FK → `Produtos(id)`                     |
-| quantidade     | int    | not null                                    |
-| valor_unitario | float  | not null (valor no momento da compra)       |
-| valor_total    | float  | not null (subtotal do item)                 |
+| Coluna             | Tipo     | Restrições                            |
+|--------------------|----------|---------------------------------------|
+| id_pedido          | int      | PK, FK → `Pedidos(id)`                |
+| id_produto         | int      | PK, FK → `Produtos(id)`               |
+| quantidade         | int      | not null                              |
+| valor_unitario     | float    | not null                              |
+| valor_total        | float    | not null                              |
+
+---
+
+### 🏷️ `Categorias`
+
+| Coluna             | Tipo     | Restrições                            |
+|--------------------|----------|---------------------------------------|
+| id                 | int      | PK, auto incremento                   |
+| nome               | varchar  | not null                              |
+| tipo_animal        | varchar  | not null                              |
+
+---
+
+### 🏭 `Estoque`
+
+| Coluna             | Tipo     | Restrições                            |
+|--------------------|----------|---------------------------------------|
+| id                 | int      | PK, auto incremento                   |
+| id_produto         | int      | FK → `Produtos(id)`                   |
+| quantidade         | int      | not null                              |
+| localizacao        | varchar  | opcional                              |
 
 ---
 
 ## 🔗 Relacionamentos
 
 - `Usuario_Juridico.id_responsavel` → `Usuario_Comum.id`
-- `Pedidos.id_usuario` → `Usuario_Comum.id`
+- `Cliente.id_usuario_comum` → `Usuario_Comum.id`
+- `Pedidos.id_cliente` → `Cliente.id`
 - `Pedidos.id_forma_pagamento` → `Forma_Pagamento.id`
-- `Pix`, `Boleto`, `Cartao` → `Forma_Pagamento.id`
-- `Pedido_Produto.id_pedido` → `Pedidos.id`
-- `Pedido_Produto.id_produto` → `Produtos.id`
+- `Item_Pedido.id_pedido` → `Pedidos.id`
+- `Item_Pedido.id_produto` → `Produtos.id`
+- `Produtos.id_categoria` → `Categorias.id`
+- `Estoque.id_produto` → `Produtos.id`
 
 ---
 
@@ -149,3 +149,5 @@ A modelagem contempla:
 - **SGBD:** MySQL
 - **Modelagem:** dbdiagram.io, MySQL Workbench
 - **Script SQL:** disponível na pasta `/scripts`
+
+---
