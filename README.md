@@ -9,7 +9,6 @@ Este repositório contém toda a documentação do projeto de desenvolvimento de
 - **Sites/**: Protótipos e modelos de referência utilizados no projeto.
 - **Divisão Funcional do Projeto em Quatro Grupos.pdf**: Documento que detalha a divisão de tarefas e responsabilidades entre os grupos.
 - **Requisitos funcionais do projeto.pdf**: Documento que descreve os requisitos funcionais e técnicos da aplicação.
-- **excalidraw.excalidraw**: Diagrama colaborativo do projeto feito com a ferramenta Excalidraw.
 
 ## 📌 Objetivo do Projeto
 
