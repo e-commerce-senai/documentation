@@ -80,6 +80,7 @@ A modelagem contempla:
 | nome       | varchar  | not null                      |
 | marca      | varchar  | not null                      |
 | id_categoria | int    | FK → `Categorias(id)`         |
+| id_usuario_juridico | int    | FK → `Usuario_Juridico(id)`         |
 | preco      | float    | not null                      |
 | descricao  | varchar  | opcional                      |
 
